@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import SidebarMenu from '@/layout/components/SidebarMenu.vue'
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger
+} from '@/components/ui/sidebar'
 </script>
 
 <template>
-  <div class="flex min-h-screen">
+  <SidebarProvider>
     <SidebarMenu />
-    <main class="flex-1 ml-64">
+    <SidebarInset>
+      <div class="flex items-center gap-2 p-4 md:hidden">
+        <SidebarTrigger />
+      </div>
       <RouterView />
-    </main>
-  </div>
+    </SidebarInset>
+  </SidebarProvider>
 </template>
