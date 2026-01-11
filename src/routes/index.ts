@@ -12,6 +12,41 @@ export const routes: RouteRecordRaw[] = [
       {
         path: RoutePath.HOME,
         component: () => import('@/modules/home/views/Home.vue')
+      },
+      {
+        path: RoutePath.EMPLOYEES,
+        component: () => import('@/modules/employees/views/EmployeesViews.vue')
+      },
+      {
+        path: RoutePath.BRANCHES,
+        component: () => import('@/modules/branches/views/BranchesViews.vue')
+      },
+      {
+        path: RoutePath.ASSIGN_BRANCHES,
+        component: () =>
+          import('@/modules/branches/views/AssignBranchesViews.vue')
+      },
+      {
+        path: RoutePath.SECTORS,
+        component: () => import('@/modules/sections/views/SectionsViews.vue')
+      },
+      {
+        path: RoutePath.CLOCK_IN_REPORTS,
+        component: () =>
+          import('@/modules/reports/views/ClockInReportsViews.vue')
+      },
+      {
+        path: RoutePath.ABSENTEE_REPORT,
+        component: () =>
+          import('@/modules/reports/views/AbsenteeReportViews.vue')
+      },
+      {
+        path: RoutePath.USERS,
+        component: () => import('@/modules/users/views/UsersViews.vue')
+      },
+      {
+        path: RoutePath.LOGS,
+        component: () => import('@/modules/logs/views/LogsViews.vue')
       }
     ]
   },

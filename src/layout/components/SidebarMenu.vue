@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {
   Users,
   Building2,
@@ -9,7 +9,8 @@ import {
   XCircle,
   Key,
   FileText,
-  LogOut
+  LogOut,
+  Home
 } from 'lucide-vue-next'
 import {
   Sidebar,
@@ -21,54 +22,65 @@ import {
   SidebarMenuButton,
   SidebarSeparator
 } from '@/components/ui/sidebar'
+import { RoutePath } from '@/routes/types/route.enum'
 
 const route = useRoute()
+const router = useRouter()
 
 const menuItems = [
   {
+    label: 'Inicio',
+    icon: Home,
+    path: RoutePath.HOME
+  },
+  {
     label: 'Empleados',
     icon: Users,
-    path: '/employees'
+    path: RoutePath.EMPLOYEES
   },
   {
     label: 'Sucursales',
     icon: Building2,
-    path: '/branches'
+    path: RoutePath.BRANCHES
   },
   {
     label: 'Asignar Sucursales',
     icon: Link2,
-    path: '/assign-branches'
+    path: RoutePath.ASSIGN_BRANCHES
   },
   {
     label: 'Sectores',
     icon: FolderTree,
-    path: '/sectors'
+    path: RoutePath.SECTORS
   },
   {
     label: 'Reportes fichadas',
     icon: BarChart3,
-    path: '/clock-in-reports'
+    path: RoutePath.CLOCK_IN_REPORTS
   },
   {
     label: 'Reporte ausentes',
     icon: XCircle,
-    path: '/absentee-report'
+    path: RoutePath.ABSENTEE_REPORT
   },
   {
     label: 'Usuarios',
     icon: Key,
-    path: '/users'
+    path: RoutePath.USERS
   },
   {
     label: 'Logs',
     icon: FileText,
-    path: '/logs'
+    path: RoutePath.LOGS
   }
 ]
 
 const isActive = (path: string) => {
   return route.path === path || route.path.startsWith(path + '/')
+}
+
+const navigateTo = (path: string) => {
+  router.push(path)
 }
 </script>
 
@@ -100,11 +112,12 @@ const isActive = (path: string) => {
             :to="item.path"
             :is-active="isActive(item.path)"
             :class="[
-              'py-6 !text-foreground !hover:bg-gray-50 !hover:text-foreground',
+              'py-6 !text-foreground !hover:bg-gray-50 !hover:text-foreground cursor-pointer',
               isActive(item.path)
-                ? '!bg-gray-100 !shadow-sm !text-foreground !font-semibold'
+                ? '!bg-red-100 !shadow-sm !text-foreground !font-semibold'
                 : ''
             ]"
+            @click="navigateTo(item.path)"
           >
             <component
               :is="item.icon"
@@ -125,7 +138,7 @@ const isActive = (path: string) => {
         <SidebarMenuItem>
           <SidebarMenuButton
             as="button"
-            class="!text-foreground !hover:bg-gray-50 !hover:text-foreground"
+            class="py-6 !text-foreground !hover:bg-gray-50 !hover:text-foreground"
           >
             <LogOut class="w-5 h-5 flex-shrink-0 text-foreground" />
             <span class="text-sm font-medium">Salir</span>
