@@ -11,30 +11,18 @@ import { Button } from '@/components/ui/button'
 import { Eye, Edit, User } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import FormEmployeDialog from '../dialog/FormEmployeDialog.vue'
+import type { EmployeeType } from '../../types/Employee'
+import { useEmployeeStore } from '../../store/employee.store'
 
 const props = defineProps<{
-  employees: Employee[]
+  employees: EmployeeType[]
 }>()
 
-const handleView = (employee: Employee) => {
+const handleView = (employee: EmployeeType) => {
   console.log(employee)
 }
 
-const handleEdit = (employee: Employee) => {
-  console.log(employee)
-}
-
-interface Employee {
-  id: number
-  nombre: string
-  apellido: string
-  dni: string
-  cuil: string
-  legajo: string
-  activo: boolean
-  debeFichar: boolean
-  token?: string
-}
+const employeeStore = useEmployeeStore()
 </script>
 
 <template>
@@ -55,7 +43,7 @@ interface Employee {
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="employee in employees" :key="employee.id">
+      <TableRow v-for="employee in employeeStore.employees" :key="employee.id">
         <!-- Foto -->
         <TableCell>
           <div
@@ -116,8 +104,8 @@ interface Employee {
               cn(
                 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border',
                 employee.debeFichar
-                  ? 'bg-sky-50 text-sky-700 border-sky-200'
-                  : 'bg-red-50 text-red-600 border-red-200'
+                  ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                  : 'bg-red-100 text-red-600 border-red-200'
               )
             "
           >
@@ -156,6 +144,7 @@ interface Employee {
               description="Modifica la información del empleado seleccionado."
               buttonClass="cursor-pointer border-slate-900"
               :initialData="employee"
+              @submit="employeeStore.setEmployeesIntoStore"
             />
           </div>
         </TableCell>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import {
@@ -19,54 +17,26 @@ import SelectTrigger from '@/components/ui/select/SelectTrigger.vue'
 import SelectValue from '@/components/ui/select/SelectValue.vue'
 import SelectContent from '@/components/ui/select/SelectContent.vue'
 import SelectItem from '@/components/ui/select/SelectItem.vue'
-
-// Esquema de validación con zod
-const employeeSchema = z.object({
-  nombre: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  apellido: z.string().min(2, 'El apellido debe tener al menos 2 caracteres'),
-  dni: z
-    .string()
-    .min(7, 'El DNI debe tener al menos 7 dígitos')
-    .regex(/^\d+$/, 'El DNI solo puede contener números'),
-  cuil: z
-    .string()
-    .min(11, 'El CUIL debe tener al menos 11 dígitos')
-    .regex(/^\d+$/, 'El CUIL solo puede contener números'),
-  correoElectronico: z
-    .string()
-    .email('Correo electrónico inválido')
-    .optional()
-    .or(z.literal('')),
-  telefonoContacto: z.string().optional().or(z.literal('')),
-  legajo: z.string().min(1, 'El legajo es requerido'),
-  sectores: z.object({
-    id: z.number(),
-    nombre: z.string()
-  }),
-  diasLaborales: z
-    .array(z.number())
-    .min(1, 'Debe seleccionar al menos un día laboral'),
-  horaIngreso: z.string().min(1, 'La hora de ingreso es requerida'),
-  horaSalida: z.string().min(1, 'La hora de salida es requerida'),
-  activo: z.boolean().default(true),
-  fechaBaja: z.string().nullable().optional(),
-  motivoBaja: z.string().optional(),
-  debeFichar: z.boolean().default(true)
-})
-
-type EmployeeFormData = z.infer<typeof employeeSchema>
+import {
+  type EmployeeSchema,
+  employeeSchema
+} from '../../schema/employeeSchema'
+import { watch } from 'vue'
+import type { SelectOption } from '@/core/types/Selects'
 
 const props = defineProps<{
-  initialData?: Partial<EmployeeFormData>
+  initialData?: Partial<EmployeeSchema>
 }>()
 
+console.log('initialData', props.initialData)
+
 const emit = defineEmits<{
-  (e: 'submit', data: EmployeeFormData): void
+  (e: 'submit', data: EmployeeSchema): void
   (e: 'cancel'): void
 }>()
 
 // Días de la semana
-const diasSemana = [
+const diasSemana: SelectOption[] = [
   { value: 1, label: 'Lunes' },
   { value: 2, label: 'Martes' },
   { value: 3, label: 'Miércoles' },
@@ -76,57 +46,37 @@ const diasSemana = [
   { value: 7, label: 'Domingo' }
 ]
 
-// Motivos de baja
-const motivosBaja = [
-  { value: '', label: 'Seleccione un motivo' },
-  { value: 'renuncia', label: 'Renuncia' },
-  { value: 'despido', label: 'Despido' },
-  { value: 'jubilacion', label: 'Jubilación' },
-  { value: 'fin_contrato', label: 'Fin de contrato' },
-  { value: 'otro', label: 'Otro' }
+const motivosBaja: SelectOption[] = [
+  { value: 0, label: 'Seleccione un motivo' },
+  { value: 1, label: 'Renuncia' },
+  { value: 2, label: 'Despido' },
+  { value: 3, label: 'Jubilación' },
+  { value: 4, label: 'Fin de contrato' },
+  { value: 5, label: 'Otro' }
 ]
 
-// Sectores (ejemplo, debería venir del módulo de Sectores)
-const sectores = [
-  { id: 1, nombre: 'Administración' },
-  { id: 2, nombre: 'Ventas' },
-  { id: 3, nombre: 'Producción' },
-  { id: 4, nombre: 'Recursos Humanos' }
+const sectores: SelectOption[] = [
+  { value: 1, label: 'Administración' },
+  { value: 2, label: 'Ventas' },
+  { value: 3, label: 'Producción' },
+  { value: 4, label: 'Recursos Humanos' }
 ]
 
-// Configurar vee-validate
-const { handleSubmit, values, errors, setFieldValue, submitCount } = useForm({
+const { handleSubmit, values, errors, submitCount, setFieldValue } = useForm({
   validationSchema: toTypedSchema(employeeSchema),
   validateOnMount: false,
-  initialValues: {
-    nombre: props.initialData?.nombre || '',
-    apellido: props.initialData?.apellido || '',
-    dni: props.initialData?.dni || '',
-    cuil: props.initialData?.cuil || '',
-    correoElectronico: props.initialData?.correoElectronico || '',
-    telefonoContacto: props.initialData?.telefonoContacto || '',
-    legajo: props.initialData?.legajo || '',
-    sectores: props.initialData?.sectores || { id: undefined, nombre: '' },
-    diasLaborales: props.initialData?.diasLaborales || [],
-    horaIngreso: props.initialData?.horaIngreso || '',
-    horaSalida: props.initialData?.horaSalida || '',
-    activo: props.initialData?.activo ?? true,
-    fechaBaja: props.initialData?.fechaBaja || null,
-    motivoBaja: props.initialData?.motivoBaja || '',
-    debeFichar: props.initialData?.debeFichar ?? true
-  }
+  keepValuesOnUnmount: true
 })
 
+console.log('values', values)
 const onSubmit = handleSubmit(
   (formValues) => {
-    emit('submit', formValues as EmployeeFormData)
+    emit('submit', formValues as EmployeeSchema)
   },
   (errors) => {
     console.log('Errores de validación:', errors)
   }
 )
-
-const showFechaBaja = computed(() => !values.activo)
 
 const toggleDiaLaboral = (dia: number) => {
   const currentDias = Array.isArray(values.diasLaborales)
@@ -142,6 +92,26 @@ const toggleDiaLaboral = (dia: number) => {
 
   setFieldValue('diasLaborales', currentDias)
 }
+
+watch(
+  () => props.initialData as EmployeeSchema,
+  (newData) => {
+    console.log('newData', newData)
+    if (newData) {
+      setFieldValue('nombre', newData.nombre)
+      setFieldValue('apellido', newData.apellido)
+      setFieldValue('dni', newData.dni)
+      setFieldValue('cuil', newData.cuil)
+      setFieldValue('legajo', newData.legajo)
+      setFieldValue('sectores', newData.sectores)
+      setFieldValue('diasLaborales', newData.diasLaborales)
+      setFieldValue('horaIngreso', newData.horaIngreso)
+      setFieldValue('horaSalida', newData.horaSalida)
+      console.log('values desde el watch', values)
+    }
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <template>
@@ -155,7 +125,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormControl>
               <Input
                 placeholder="Ingrese el nombre"
-                :model-value="field.value"
+                :model-value="values.nombre"
                 @update:modelValue="setFieldValue('nombre', $event as string)"
                 @blur="field.onBlur"
               />
@@ -173,7 +143,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>Apellido *</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.apellido"
                 placeholder="Ingrese el apellido"
                 @update:modelValue="setFieldValue('apellido', $event as string)"
                 @blur="field.onBlur"
@@ -194,7 +164,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>DNI *</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.dni"
                 placeholder="Ingrese el DNI"
                 maxlength="8"
                 @blur="field.onBlur"
@@ -213,7 +183,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>CUIL *</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.cuil"
                 maxlength="11"
                 placeholder="Ingrese el CUIL"
                 @blur="field.onBlur"
@@ -235,7 +205,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>Correo Electrónico</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.correoElectronico"
                 type="email"
                 placeholder="correo@ejemplo.com"
                 @blur="field.onBlur"
@@ -258,7 +228,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>Teléfono de Contacto</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.telefonoContacto"
                 type="tel"
                 placeholder="+54 9 11 1234-5678"
                 @blur="field.onBlur"
@@ -283,7 +253,7 @@ const toggleDiaLaboral = (dia: number) => {
           <FormLabel>Legajo *</FormLabel>
           <FormControl>
             <Input
-              :model-value="field.value"
+              :model-value="values.legajo"
               placeholder="Ingrese el número de legajo"
               @blur="field.onBlur"
               @update:modelValue="setFieldValue('legajo', $event as string)"
@@ -301,11 +271,11 @@ const toggleDiaLaboral = (dia: number) => {
         <FormItem class="relative">
           <FormLabel>Sectores *</FormLabel>
           <Select
-            :model-value="field.value"
+            :model-value="values.sectores"
             @update:modelValue="
               setFieldValue(
                 'sectores',
-                $event as unknown as { id: number; nombre: string }
+                $event as unknown as { id: number; label: string }
               )
             "
           >
@@ -315,10 +285,10 @@ const toggleDiaLaboral = (dia: number) => {
             <SelectContent>
               <SelectItem
                 v-for="sector in sectores"
-                :key="sector.id"
+                :key="sector.value"
                 :value="sector"
               >
-                {{ sector.nombre }}
+                {{ sector.label }}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -341,7 +311,10 @@ const toggleDiaLaboral = (dia: number) => {
             >
               <FormControl>
                 <Checkbox
-                  :checked="(value as number[])?.includes(dia.value)"
+                  :checked="
+                    (values.diasLaborales as number[])?.includes(dia.value)
+                  "
+                  :model-value="values.diasLaborales"
                   @update:modelValue="toggleDiaLaboral(dia.value)"
                 />
               </FormControl>
@@ -368,6 +341,7 @@ const toggleDiaLaboral = (dia: number) => {
               <Input
                 v-bind="field"
                 type="time"
+                :model-value="values.horaIngreso"
                 @update:modelValue="
                   setFieldValue('horaIngreso', $event as string)
                 "
@@ -385,7 +359,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>Hora de Salida *</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.horaSalida"
                 type="time"
                 @blur="field.onBlur"
                 @update:modelValue="
@@ -403,13 +377,14 @@ const toggleDiaLaboral = (dia: number) => {
 
       <!-- Checkboxes: Activo y Debe fichar -->
       <div class="space-y-4">
-        <FormField v-slot="{ field }" name="activo">
+        <FormField name="activo">
           <FormItem
             class="flex flex-row items-start space-x-3 space-y-0 relative"
           >
             <FormControl>
               <Checkbox
-                :checked="field.value as boolean"
+                :checked="values.activo as boolean"
+                :model-value="values.activo"
                 @update:checked="setFieldValue('activo', $event as boolean)"
               />
             </FormControl>
@@ -418,32 +393,16 @@ const toggleDiaLaboral = (dia: number) => {
             </div>
           </FormItem>
         </FormField>
-
-        <FormField v-slot="{ field }" name="debeFichar">
-          <FormItem
-            class="flex flex-row items-start space-x-3 space-y-0 relative !h-auto"
-          >
-            <FormControl>
-              <Checkbox
-                :checked="field.value as boolean"
-                @update:checked="setFieldValue('debeFichar', $event as boolean)"
-              />
-            </FormControl>
-            <div class="space-y-1 leading-none">
-              <FormLabel>Debe fichar</FormLabel>
-            </div>
-          </FormItem>
-        </FormField>
       </div>
 
       <!-- Fecha de Baja y Motivo (solo si no está activo) -->
-      <div v-if="showFechaBaja" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField v-slot="{ field, meta }" name="fechaBaja">
           <FormItem class="relative">
             <FormLabel>Fecha de Baja</FormLabel>
             <FormControl>
               <Input
-                :model-value="field.value"
+                :model-value="values.fechaBaja"
                 @blur="field.onBlur"
                 type="date"
                 :value="values.fechaBaja || ''"
@@ -464,7 +423,7 @@ const toggleDiaLaboral = (dia: number) => {
             <FormLabel>Motivo de Baja</FormLabel>
             <FormControl>
               <select
-                :model-value="field.value"
+                :model-value="values.motivoBaja"
                 @blur="field.onBlur"
                 class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 @update:modelValue="
@@ -484,6 +443,24 @@ const toggleDiaLaboral = (dia: number) => {
               v-if="(meta.touched || submitCount > 0) && !!errors.motivoBaja"
               :errors="[errors.motivoBaja]"
             />
+          </FormItem>
+        </FormField>
+      </div>
+      <div class="space-y-4">
+        <FormField name="debeFichar">
+          <FormItem
+            class="flex flex-row items-start space-x-3 space-y-0 relative !h-auto"
+          >
+            <FormControl>
+              <Checkbox
+                :checked="values.debeFichar as boolean"
+                :model-value="values.debeFichar"
+                @update:checked="setFieldValue('debeFichar', $event)"
+              />
+            </FormControl>
+            <div class="space-y-1 leading-none">
+              <FormLabel>Debe fichar</FormLabel>
+            </div>
           </FormItem>
         </FormField>
       </div>

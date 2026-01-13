@@ -13,6 +13,7 @@ import { Search, Plus } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import FormEmployeDialog from '../components/dialog/FormEmployeDialog.vue'
 import EmployeesTable from '../components/table/EmployeesTable.vue'
+import { useEmployeeStore } from '../store/employee.store'
 
 interface Employee {
   id: number
@@ -31,27 +32,7 @@ const viewDialogOpen = ref(false)
 const editDialogOpen = ref(false)
 const selectedEmployee = ref<Employee | null>(null)
 
-const employees = ref<Employee[]>([
-  {
-    id: 2,
-    nombre: 'AUGUSTO',
-    apellido: 'RAMIREZ',
-    dni: '352545254',
-    cuil: '203525452542',
-    legajo: '1458',
-    activo: true,
-    debeFichar: true,
-    token: 'Token'
-  }
-])
-
-const handleSubmit = (data: Employee) => {
-  console.log('Datos del formulario:', data)
-  employees.value = [
-    ...employees.value,
-    { ...data, id: employees.value.length + 1 } as Employee
-  ]
-}
+const employeeStore = useEmployeeStore()
 </script>
 
 <template>
@@ -86,7 +67,7 @@ const handleSubmit = (data: Employee) => {
                 :icon="Plus"
                 title="Nuevo Empleado"
                 description="Completa el formulario para agregar un nuevo empleado al sistema."
-                @submit="handleSubmit"
+                @submit="employeeStore.setEmployeesIntoStore"
               />
             </div>
           </div>
@@ -94,7 +75,7 @@ const handleSubmit = (data: Employee) => {
 
         <!-- Table Section -->
         <CardContent>
-          <EmployeesTable :employees="employees" />
+          <EmployeesTable :employees="employeeStore.employees" />
         </CardContent>
       </Card>
     </div>
