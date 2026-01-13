@@ -78,19 +78,19 @@ const onSubmit = handleSubmit(
   }
 )
 
-const toggleDiaLaboral = (dia: number) => {
-  const currentDias = Array.isArray(values.diasLaborales)
-    ? [...values.diasLaborales]
-    : []
-  const index = currentDias.indexOf(dia)
+const setDiaLaboral = (dia: number, checked: boolean) => {
+  console.log('dia', dia)
+  console.log('checked', checked)
+  const dias = [...(values.diasLaborales ?? [])]
 
-  if (index > -1) {
-    currentDias.splice(index, 1)
+  if (checked) {
+    if (!dias.includes(dia)) dias.push(dia)
   } else {
-    currentDias.push(dia)
+    const index = dias.indexOf(dia)
+    if (index !== -1) dias.splice(index, 1)
   }
 
-  setFieldValue('diasLaborales', currentDias)
+  setFieldValue('diasLaborales', dias)
 }
 
 watch(
@@ -104,7 +104,10 @@ watch(
       setFieldValue('cuil', newData.cuil)
       setFieldValue('legajo', newData.legajo)
       setFieldValue('sectores', newData.sectores)
-      setFieldValue('diasLaborales', newData.diasLaborales)
+      setFieldValue(
+        'diasLaborales',
+        Array.isArray(newData.diasLaborales) ? newData.diasLaborales : []
+      )
       setFieldValue('horaIngreso', newData.horaIngreso)
       setFieldValue('horaSalida', newData.horaSalida)
       console.log('values desde el watch', values)
@@ -267,7 +270,7 @@ watch(
       </FormField>
 
       <!-- Sectores -->
-      <FormField v-slot="{ field, meta }" name="sectores">
+      <FormField v-slot="{ meta }" name="sectores">
         <FormItem class="relative">
           <FormLabel>Sectores *</FormLabel>
           <Select
@@ -300,7 +303,7 @@ watch(
       </FormField>
 
       <!-- Días Laborales -->
-      <FormField v-slot="{ value, meta }" name="diasLaborales">
+      <FormField v-slot="{ meta }" name="diasLaborales">
         <FormItem class="relative">
           <FormLabel>Días Laborales *</FormLabel>
           <div class="flex flex-col sm:flex-row sm:flex-wrap gap-4 mt-2">
@@ -312,10 +315,12 @@ watch(
               <FormControl>
                 <Checkbox
                   :checked="
-                    (values.diasLaborales as number[])?.includes(dia.value)
+                    values.diasLaborales?.includes(dia.value) as boolean
                   "
-                  :model-value="values.diasLaborales"
-                  @update:modelValue="toggleDiaLaboral(dia.value)"
+                  :model-value="values.diasLaborales?.includes(dia.value)"
+                  @update:modelValue="
+                    setDiaLaboral(dia.value, $event as boolean)
+                  "
                 />
               </FormControl>
               <div class="leading-none">
