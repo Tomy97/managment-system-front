@@ -23,12 +23,12 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: RoutePath.BRANCHES,
-        component: () => import('@/modules/branches/views/BranchesViews.vue')
+        component: () => import('@/modules/soon/views/SoonViews.vue')
       },
       {
         path: RoutePath.ASSIGN_BRANCHES,
         component: () =>
-          import('@/modules/branches/views/AssignBranchesViews.vue')
+          import('@/modules/soon/views/SoonViews.vue')
       },
       {
         path: RoutePath.SECTORS,
@@ -42,7 +42,7 @@ export const routes: RouteRecordRaw[] = [
       {
         path: RoutePath.ABSENTEE_REPORT,
         component: () =>
-          import('@/modules/reports/views/AbsenteeReportViews.vue')
+          import('@/modules/soon/views/SoonViews.vue')
       },
       {
         path: RoutePath.USERS,
@@ -50,7 +50,7 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: RoutePath.LOGS,
-        component: () => import('@/modules/logs/views/LogsViews.vue')
+        component: () => import('@/modules/soon/views/SoonViews.vue')
       }
     ]
   },
