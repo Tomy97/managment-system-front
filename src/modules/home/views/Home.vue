@@ -6,8 +6,6 @@ import {
   FolderTree,
   Key,
   UserCog,
-  TrendingUp,
-  Activity
 } from 'lucide-vue-next'
 import StatCard from '@/modules/home/components/StatCard.vue'
 import QuickActionCard from '@/modules/home/components/QuickActionCard.vue'
@@ -118,7 +116,6 @@ const quickActions = [
           :trend="card.trend"
           :trendLabel="card.trendLabel"
           :icon="card.icon"
-          :subIcon="card.subIcon"
         />
       </div>
     </div>

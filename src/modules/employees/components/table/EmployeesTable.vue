@@ -20,10 +20,6 @@ const props = defineProps<{
   employees: EmployeeType[]
 }>()
 
-const handleView = (employee: EmployeeType) => {
-  console.log(employee)
-}
-
 const tableHeaders = [
   {
     label: 'Foto',
