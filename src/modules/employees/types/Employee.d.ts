@@ -1,11 +1,17 @@
 export type EmployeeType = {
   id: number
-  nombre: string
-  apellido: string
+  name: string
+  lastName: string
   dni: string
   cuil: string
-  legajo: string
-  activo: boolean
-  debeFichar: boolean
+  employeeNumber: string
+  active: boolean
+  mustClock: boolean
+  email: string
+  phone: string
+  sectors: string[]
+  daysOfWork: number[]
+  entryTime: string
+  exitTime: string
   token?: string
 }

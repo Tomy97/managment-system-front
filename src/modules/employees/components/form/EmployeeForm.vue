@@ -21,7 +21,7 @@ import {
   type EmployeeSchema,
   employeeSchema
 } from '../../schema/employeeSchema'
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 import type { SelectOption } from '@/core/types/Selects'
 
 const props = defineProps<{
@@ -34,6 +34,9 @@ const emit = defineEmits<{
   (e: 'submit', data: EmployeeSchema): void
   (e: 'cancel'): void
 }>()
+
+// Guardar el id del empleado si existe (para edición)
+const employeeId = ref<number | undefined>(undefined)
 
 // Días de la semana
 const diasSemana: SelectOption[] = [
@@ -71,46 +74,63 @@ const { handleSubmit, values, errors, submitCount, setFieldValue } = useForm({
 console.log('values', values)
 const onSubmit = handleSubmit(
   (formValues) => {
-    emit('submit', formValues as EmployeeSchema)
+    // Incluir el id si existe (para edición)
+    const dataToSubmit = {
+      ...formValues,
+      ...(employeeId.value && { id: employeeId.value })
+    }
+    emit('submit', dataToSubmit as EmployeeSchema & { id?: number })
   },
   (errors) => {
     console.log('Errores de validación:', errors)
   }
 )
 
-const setDiaLaboral = (dia: number, checked: boolean) => {
-  console.log('dia', dia)
+const setDayOfWork = (day: number, checked: boolean) => {
+  console.log('day', day)
   console.log('checked', checked)
-  const dias = [...(values.diasLaborales ?? [])]
+  const days = [...(values.daysOfWork ?? [])]
 
   if (checked) {
-    if (!dias.includes(dia)) dias.push(dia)
+    if (!days.includes(day)) days.push(day)
   } else {
-    const index = dias.indexOf(dia)
-    if (index !== -1) dias.splice(index, 1)
+    const index = days.indexOf(day)
+    if (index !== -1) days.splice(index, 1)
   }
 
-  setFieldValue('diasLaborales', dias)
+  setFieldValue('daysOfWork', days)
 }
 
 watch(
-  () => props.initialData as EmployeeSchema,
+  () => props.initialData as EmployeeSchema & { id?: number },
   (newData) => {
     console.log('newData', newData)
     if (newData) {
-      setFieldValue('nombre', newData.nombre)
-      setFieldValue('apellido', newData.apellido)
+      // Guardar el id si existe
+      employeeId.value = (newData as any).id
+
+      setFieldValue('name', newData.name)
+      setFieldValue('lastName', newData.lastName)
       setFieldValue('dni', newData.dni)
       setFieldValue('cuil', newData.cuil)
-      setFieldValue('legajo', newData.legajo)
-      setFieldValue('sectores', newData.sectores)
+      setFieldValue('employeeNumber', newData.employeeNumber)
+      setFieldValue('sectors', newData.sectors)
       setFieldValue(
-        'diasLaborales',
-        Array.isArray(newData.diasLaborales) ? newData.diasLaborales : []
+        'daysOfWork',
+        Array.isArray(newData.daysOfWork) ? newData.daysOfWork : []
       )
-      setFieldValue('horaIngreso', newData.horaIngreso)
-      setFieldValue('horaSalida', newData.horaSalida)
+      setFieldValue('entryTime', newData.entryTime)
+      setFieldValue('exitTime', newData.exitTime)
+      setFieldValue('active', newData.active)
+      setFieldValue('mustClock', newData.mustClock)
+      setFieldValue('leaveDate', newData.leaveDate)
+      setFieldValue('reasonForLeave', newData.reasonForLeave)
+      setFieldValue('email', newData.email)
+      setFieldValue('phone', newData.phone)
       console.log('values desde el watch', values)
+    } else {
+      // Limpiar el id si no hay initialData (nuevo empleado)
+      employeeId.value = undefined
     }
   },
   { immediate: true, deep: true }
@@ -128,15 +148,15 @@ watch(
             <FormControl>
               <Input
                 placeholder="Ingrese el nombre"
-                :model-value="values.nombre"
-                @update:modelValue="setFieldValue('nombre', $event as string)"
+                :model-value="values.name"
+                @update:modelValue="setFieldValue('name', $event as string)"
                 @blur="field.onBlur"
               />
             </FormControl>
 
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.nombre"
-              :errors="[errors.nombre]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.name"
+              :errors="[errors.name]"
             />
           </FormItem>
         </FormField>
@@ -146,15 +166,15 @@ watch(
             <FormLabel>Apellido *</FormLabel>
             <FormControl>
               <Input
-                :model-value="values.apellido"
+                :model-value="values.lastName"
                 placeholder="Ingrese el apellido"
-                @update:modelValue="setFieldValue('apellido', $event as string)"
+                @update:modelValue="setFieldValue('lastName', $event as string)"
                 @blur="field.onBlur"
               />
             </FormControl>
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.apellido"
-              :errors="[errors.apellido]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.lastName"
+              :errors="[errors.lastName]"
             />
           </FormItem>
         </FormField>
@@ -203,48 +223,40 @@ watch(
 
       <!-- Tercera fila: Correo y Teléfono -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <FormField v-slot="{ field, meta }" name="correoElectronico">
+        <FormField v-slot="{ field, meta }" name="email">
           <FormItem class="relative">
             <FormLabel>Correo Electrónico</FormLabel>
             <FormControl>
               <Input
-                :model-value="values.correoElectronico"
+                :model-value="values.email"
                 type="email"
                 placeholder="correo@ejemplo.com"
                 @blur="field.onBlur"
-                @update:modelValue="
-                  setFieldValue('correoElectronico', $event as string)
-                "
+                @update:modelValue="setFieldValue('email', $event as string)"
               />
             </FormControl>
             <FieldError
-              v-if="
-                (meta.touched || submitCount > 0) && !!errors.correoElectronico
-              "
-              :errors="[errors.correoElectronico]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.email"
+              :errors="[errors.email]"
             />
           </FormItem>
         </FormField>
 
-        <FormField v-slot="{ field, meta }" name="telefonoContacto">
+        <FormField v-slot="{ field, meta }" name="phone">
           <FormItem class="relative">
             <FormLabel>Teléfono de Contacto</FormLabel>
             <FormControl>
               <Input
-                :model-value="values.telefonoContacto"
+                :model-value="values.phone"
                 type="tel"
                 placeholder="+54 9 11 1234-5678"
                 @blur="field.onBlur"
-                @update:modelValue="
-                  setFieldValue('telefonoContacto', $event as string)
-                "
+                @update:modelValue="setFieldValue('phone', $event as string)"
               />
             </FormControl>
             <FieldError
-              v-if="
-                (meta.touched || submitCount > 0) && !!errors.telefonoContacto
-              "
-              :errors="[errors.telefonoContacto]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.phone"
+              :errors="[errors.phone]"
             />
           </FormItem>
         </FormField>
@@ -256,28 +268,30 @@ watch(
           <FormLabel>Legajo *</FormLabel>
           <FormControl>
             <Input
-              :model-value="values.legajo"
+              :model-value="values.employeeNumber"
               placeholder="Ingrese el número de legajo"
               @blur="field.onBlur"
-              @update:modelValue="setFieldValue('legajo', $event as string)"
+              @update:modelValue="
+                setFieldValue('employeeNumber', $event as string)
+              "
             />
           </FormControl>
           <FieldError
-            v-if="(meta.touched || submitCount > 0) && !!errors.legajo"
-            :errors="[errors.legajo]"
+            v-if="(meta.touched || submitCount > 0) && !!errors.employeeNumber"
+            :errors="[errors.employeeNumber]"
           />
         </FormItem>
       </FormField>
 
       <!-- Sectores -->
-      <FormField v-slot="{ meta }" name="sectores">
+      <FormField v-slot="{ meta }" name="sectors">
         <FormItem class="relative">
           <FormLabel>Sectores *</FormLabel>
           <Select
-            :model-value="values.sectores"
+            :model-value="values.sectors"
             @update:modelValue="
               setFieldValue(
-                'sectores',
+                'sectors',
                 $event as unknown as { id: number; label: string }
               )
             "
@@ -296,8 +310,8 @@ watch(
             </SelectContent>
           </Select>
           <FieldError
-            v-if="(meta.touched || submitCount > 0) && !!errors.sectores"
-            :errors="[errors.sectores]"
+            v-if="(meta.touched || submitCount > 0) && !!errors.sectors"
+            :errors="[errors.sectors]"
           />
         </FormItem>
       </FormField>
@@ -314,12 +328,10 @@ watch(
             >
               <FormControl>
                 <Checkbox
-                  :checked="
-                    values.diasLaborales?.includes(dia.value) as boolean
-                  "
-                  :model-value="values.diasLaborales?.includes(dia.value)"
+                  :checked="values.daysOfWork?.includes(dia.value) as boolean"
+                  :model-value="values.daysOfWork?.includes(dia.value)"
                   @update:modelValue="
-                    setDiaLaboral(dia.value, $event as boolean)
+                    setDayOfWork(dia.value, $event as boolean)
                   "
                 />
               </FormControl>
@@ -331,8 +343,8 @@ watch(
             </FormItem>
           </div>
           <FieldError
-            v-if="(meta.touched || submitCount > 0) && !!errors.diasLaborales"
-            :errors="[errors.diasLaborales]"
+            v-if="(meta.touched || submitCount > 0) && !!errors.daysOfWork"
+            :errors="[errors.daysOfWork]"
           />
         </FormItem>
       </FormField>
@@ -346,15 +358,15 @@ watch(
               <Input
                 v-bind="field"
                 type="time"
-                :model-value="values.horaIngreso"
+                :model-value="values.entryTime"
                 @update:modelValue="
-                  setFieldValue('horaIngreso', $event as string)
+                  setFieldValue('entryTime', $event as string)
                 "
               />
             </FormControl>
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.horaIngreso"
-              :errors="[errors.horaIngreso]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.entryTime"
+              :errors="[errors.entryTime]"
             />
           </FormItem>
         </FormField>
@@ -364,17 +376,15 @@ watch(
             <FormLabel>Hora de Salida *</FormLabel>
             <FormControl>
               <Input
-                :model-value="values.horaSalida"
+                :model-value="values.exitTime"
                 type="time"
                 @blur="field.onBlur"
-                @update:modelValue="
-                  setFieldValue('horaSalida', $event as string)
-                "
+                @update:modelValue="setFieldValue('exitTime', $event as string)"
               />
             </FormControl>
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.horaSalida"
-              :errors="[errors.horaSalida]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.exitTime"
+              :errors="[errors.exitTime]"
             />
           </FormItem>
         </FormField>
@@ -382,19 +392,19 @@ watch(
 
       <!-- Checkboxes: Activo y Debe fichar -->
       <div class="space-y-4">
-        <FormField name="activo">
+        <FormField name="active">
           <FormItem
             class="flex flex-row items-start space-x-3 space-y-0 relative"
           >
             <FormControl>
               <Checkbox
-                :checked="values.activo as boolean"
-                :model-value="values.activo"
-                @update:checked="setFieldValue('activo', $event as boolean)"
+                :checked="values.active as boolean"
+                :model-value="values.active"
+                @update:modelValue="setFieldValue('active', $event as boolean)"
               />
             </FormControl>
-            <div class="space-y-1 leading-none">
-              <FormLabel>Activo</FormLabel>
+            <div class="leading-none">
+              <FormLabel class="font-normal cursor-pointer"> Activo </FormLabel>
             </div>
           </FormItem>
         </FormField>
@@ -402,37 +412,37 @@ watch(
 
       <!-- Fecha de Baja y Motivo (solo si no está activo) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <FormField v-slot="{ field, meta }" name="fechaBaja">
+        <FormField v-slot="{ field, meta }" name="leaveDate">
           <FormItem class="relative">
             <FormLabel>Fecha de Baja</FormLabel>
             <FormControl>
               <Input
-                :model-value="values.fechaBaja"
+                :model-value="values.leaveDate"
                 @blur="field.onBlur"
                 type="date"
-                :value="values.fechaBaja || ''"
+                :value="values.leaveDate || ''"
                 @update:modelValue="
-                  setFieldValue('fechaBaja', $event as string)
+                  setFieldValue('leaveDate', $event as string)
                 "
               />
             </FormControl>
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.fechaBaja"
-              :errors="[errors.fechaBaja]"
+              v-if="(meta.touched || submitCount > 0) && !!errors.leaveDate"
+              :errors="[errors.leaveDate]"
             />
           </FormItem>
         </FormField>
 
-        <FormField v-slot="{ field, meta }" name="motivoBaja">
+        <FormField v-slot="{ field, meta }" name="reasonForLeave">
           <FormItem class="relative">
             <FormLabel>Motivo de Baja</FormLabel>
             <FormControl>
               <select
-                :model-value="values.motivoBaja"
+                :model-value="values.reasonForLeave"
                 @blur="field.onBlur"
                 class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                 @update:modelValue="
-                  setFieldValue('motivoBaja', $event as string)
+                  setFieldValue('reasonForLeave', $event as string)
                 "
               >
                 <option
@@ -445,26 +455,32 @@ watch(
               </select>
             </FormControl>
             <FieldError
-              v-if="(meta.touched || submitCount > 0) && !!errors.motivoBaja"
-              :errors="[errors.motivoBaja]"
+              v-if="
+                (meta.touched || submitCount > 0) && !!errors.reasonForLeave
+              "
+              :errors="[errors.reasonForLeave]"
             />
           </FormItem>
         </FormField>
       </div>
       <div class="space-y-4">
-        <FormField name="debeFichar">
+        <FormField name="mustClock">
           <FormItem
             class="flex flex-row items-start space-x-3 space-y-0 relative !h-auto"
           >
             <FormControl>
               <Checkbox
-                :checked="values.debeFichar as boolean"
-                :model-value="values.debeFichar"
-                @update:checked="setFieldValue('debeFichar', $event)"
+                :checked="values.mustClock as boolean"
+                :model-value="values.mustClock"
+                @update:modelValue="
+                  setFieldValue('mustClock', $event as boolean)
+                "
               />
             </FormControl>
-            <div class="space-y-1 leading-none">
-              <FormLabel>Debe fichar</FormLabel>
+            <div class="leading-none">
+              <FormLabel class="font-normal cursor-pointer"
+                >Debe fichar</FormLabel
+              >
             </div>
           </FormItem>
         </FormField>

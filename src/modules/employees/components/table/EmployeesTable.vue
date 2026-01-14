@@ -60,12 +60,12 @@ const employeeStore = useEmployeeStore()
 
         <!-- Nombre -->
         <TableCell>
-          <span class="text-sm font-medium">{{ employee.nombre }}</span>
+          <span class="text-sm font-medium">{{ employee.name }}</span>
         </TableCell>
 
         <!-- Apellido -->
         <TableCell>
-          <span class="text-sm font-medium">{{ employee.apellido }}</span>
+          <span class="text-sm font-medium">{{ employee.lastName }}</span>
         </TableCell>
 
         <!-- DNI -->
@@ -80,7 +80,7 @@ const employeeStore = useEmployeeStore()
 
         <!-- Legajo -->
         <TableCell>
-          <span class="text-sm">{{ employee.legajo }}</span>
+          <span class="text-sm">{{ employee.employeeNumber }}</span>
         </TableCell>
         <!-- Activo -->
         <TableCell>
@@ -88,13 +88,13 @@ const employeeStore = useEmployeeStore()
             :class="
               cn(
                 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border',
-                employee.activo
+                employee.active
                   ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
                   : 'bg-red-100 text-red-600 border-red-200'
               )
             "
           >
-            {{ employee.activo ? 'Sí' : 'No' }}
+            {{ employee.active ? 'Sí' : 'No' }}
           </span>
         </TableCell>
 
@@ -103,13 +103,13 @@ const employeeStore = useEmployeeStore()
             :class="
               cn(
                 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold border',
-                employee.debeFichar
+                employee.mustClock
                   ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
                   : 'bg-red-100 text-red-600 border-red-200'
               )
             "
           >
-            {{ employee.debeFichar ? 'Sí' : 'No' }}
+            {{ employee.mustClock ? 'Sí' : 'No' }}
           </span>
         </TableCell>
 
