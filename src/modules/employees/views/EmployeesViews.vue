@@ -2,35 +2,12 @@
 import { ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
 import { Search, Plus } from 'lucide-vue-next'
-import { cn } from '@/lib/utils'
 import FormEmployeDialog from '../components/dialog/FormEmployeDialog.vue'
 import EmployeesTable from '../components/table/EmployeesTable.vue'
 import { useEmployeeStore } from '../store/employee.store'
 
-interface Employee {
-  id: number
-  nombre: string
-  apellido: string
-  dni: string
-  cuil: string
-  legajo: string
-  activo: boolean
-  debeFichar: boolean
-  token?: string
-}
-
 const searchQuery = ref('')
-const viewDialogOpen = ref(false)
-const editDialogOpen = ref(false)
-const selectedEmployee = ref<Employee | null>(null)
 
 const employeeStore = useEmployeeStore()
 </script>
@@ -79,98 +56,5 @@ const employeeStore = useEmployeeStore()
         </CardContent>
       </Card>
     </div>
-
-    <!-- Dialog para Ver Empleado -->
-    <Dialog v-model:open="viewDialogOpen">
-      <DialogContent class="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Detalles del Empleado</DialogTitle>
-          <DialogDescription>
-            Información completa del empleado seleccionado.
-          </DialogDescription>
-        </DialogHeader>
-        <div v-if="selectedEmployee" class="py-4 space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">ID</p>
-              <p class="text-sm">{{ selectedEmployee.id }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">Nombre</p>
-              <p class="text-sm">{{ selectedEmployee.nombre }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">Apellido</p>
-              <p class="text-sm">{{ selectedEmployee.apellido }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">DNI</p>
-              <p class="text-sm">{{ selectedEmployee.dni }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">CUIL</p>
-              <p class="text-sm">{{ selectedEmployee.cuil }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">Legajo</p>
-              <p class="text-sm">{{ selectedEmployee.legajo }}</p>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">Activo</p>
-              <span
-                :class="
-                  cn(
-                    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                    selectedEmployee.activo
-                      ? 'bg-green-600 text-white'
-                      : 'bg-muted text-muted-foreground'
-                  )
-                "
-              >
-                {{ selectedEmployee.activo ? 'Sí' : 'No' }}
-              </span>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">
-                Debe fichar
-              </p>
-              <span
-                :class="
-                  cn(
-                    'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
-                    selectedEmployee.debeFichar
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-muted text-muted-foreground'
-                  )
-                "
-              >
-                {{ selectedEmployee.debeFichar ? 'Sí' : 'No' }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-
-    <!-- Dialog para Editar Empleado esto va a ser el mismo compo que con el que se crea -->
-    <Dialog v-model:open="editDialogOpen">
-      <DialogContent class="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Editar Empleado</DialogTitle>
-          <DialogDescription>
-            Modifica la información del empleado seleccionado.
-          </DialogDescription>
-        </DialogHeader>
-        <div v-if="selectedEmployee" class="py-4">
-          <p class="text-sm text-muted-foreground">
-            Formulario de edición (pendiente de implementar)
-          </p>
-          <p class="text-sm mt-2">
-            Editando: {{ selectedEmployee.nombre }}
-            {{ selectedEmployee.apellido }}
-          </p>
-        </div>
-      </DialogContent>
-    </Dialog>
   </div>
 </template>

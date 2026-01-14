@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 import FormEmployeDialog from '../dialog/FormEmployeDialog.vue'
 import type { EmployeeType } from '../../types/Employee'
 import { useEmployeeStore } from '../../store/employee.store'
+import EmployeeDatesDialog from '../dialog/EmployeeDatesDialog.vue'
 
 const props = defineProps<{
   employees: EmployeeType[]
@@ -22,6 +23,53 @@ const handleView = (employee: EmployeeType) => {
   console.log(employee)
 }
 
+const tableHeaders = [
+  {
+    label: 'Foto',
+    key: 'photo'
+  },
+  {
+    label: 'ID',
+    key: 'id'
+  },
+  {
+    label: 'Nombre',
+    key: 'name'
+  },
+  {
+    label: 'Apellido',
+    key: 'lastName'
+  },
+  {
+    label: 'DNI',
+    key: 'dni'
+  },
+  {
+    label: 'CUIL',
+    key: 'cuil'
+  },
+  {
+    label: 'Legajo',
+    key: 'employeeNumber'
+  },
+  {
+    label: 'Activo',
+    key: 'active'
+  },
+  {
+    label: 'Debe fichar',
+    key: 'mustClock'
+  },
+  {
+    label: 'Token',
+    key: 'token'
+  },
+  {
+    label: 'Acciones',
+    key: 'actions'
+  }
+]
+
 const employeeStore = useEmployeeStore()
 </script>
 
@@ -29,17 +77,9 @@ const employeeStore = useEmployeeStore()
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Foto</TableHead>
-        <TableHead>ID</TableHead>
-        <TableHead>Nombre</TableHead>
-        <TableHead>Apellido</TableHead>
-        <TableHead>DNI</TableHead>
-        <TableHead>CUIL</TableHead>
-        <TableHead>Legajo</TableHead>
-        <TableHead>Activo</TableHead>
-        <TableHead>Debe fichar</TableHead>
-        <TableHead>Token</TableHead>
-        <TableHead>Acciones</TableHead>
+        <TableHead v-for="header in tableHeaders" :key="header.key">
+          {{ header.label }}
+        </TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -128,15 +168,7 @@ const employeeStore = useEmployeeStore()
         <!-- Acciones -->
         <TableCell>
           <div class="flex items-center gap-2">
-            <Button
-              @click="handleView(employee)"
-              variant="outline"
-              size="sm"
-              class="cursor-pointer border-slate-900"
-            >
-              <Eye class="size-4" />
-              Ver
-            </Button>
+            <EmployeeDatesDialog v-if="employee.id" :employee="employee" />
             <FormEmployeDialog
               buttonText="Editar"
               :icon="Edit"

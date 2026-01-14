@@ -1,6 +1,7 @@
 import { z } from 'zod'
+import type { EmployeeType } from './../types/Employee.d';
 
-export type EmployeeSchema = z.infer<typeof employeeSchema>
+export type EmployeeSchema = z.infer<typeof employeeSchema> & EmployeeType
 
 export const employeeSchema = z.object({
   name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),

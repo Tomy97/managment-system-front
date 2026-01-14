@@ -3,7 +3,7 @@ import { ref, type Component } from 'vue'
 import GenericDialog from './GenericDialog.vue'
 import EmployeeForm from '../form/EmployeeForm.vue'
 import type { ButtonVariants } from '@/components/ui/button'
-import type { EmployeeType } from '../../types/Employee';
+import type { EmployeeSchema } from '../../schema/employeeSchema'
 
 const props = defineProps<{
   buttonText: string
@@ -12,7 +12,7 @@ const props = defineProps<{
   description: string
   buttonClass?: string
   buttonVariant?: ButtonVariants['variant']
-  initialData?: EmployeeType
+  initialData?: EmployeeSchema
 }>()
 
 const emit = defineEmits<{
