@@ -7,7 +7,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/managment-system-front/'),
   routes
 })
 const pinia = createPinia()
