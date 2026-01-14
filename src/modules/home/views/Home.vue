@@ -12,13 +12,15 @@ import {
 import StatCard from '@/modules/home/components/StatCard.vue'
 import QuickActionCard from '@/modules/home/components/QuickActionCard.vue'
 import { RouteName } from '@/routes/types/route.enum'
+import { useEmployeeStore } from '@/modules/employees/store/employee.store'
 
+const employeeStore = useEmployeeStore()
 const statsCards = [
   {
     key: 'employees',
     title: 'Empleados',
-    value: 24,
-    trend: '+12%',
+    value: employeeStore.totalEmployees,
+    trend: `${employeeStore.monthlyGrowth}%`,
     trendLabel: 'este mes',
     icon: Users
   },
