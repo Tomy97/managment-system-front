@@ -15,21 +15,6 @@ const props = defineProps<{
   sections: SectionType[]
 }>()
 
-const tableHeaders = [
-  {
-    label: 'ID',
-    key: 'id'
-  },
-  {
-    label: 'Nombre',
-    key: 'name'
-  },
-  {
-    label: 'Acciones',
-    key: 'actions'
-  }
-]
-
 const sectionsStore = useSectionsStore()
 </script>
 

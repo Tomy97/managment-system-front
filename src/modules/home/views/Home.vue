@@ -26,14 +26,14 @@ const statsCards = [
     trendLabel: 'este mes',
     icon: Users
   },
-  {
-    key: 'branches',
-    title: 'Sucursales',
-    value: 8,
-    trend: '+2',
-    trendLabel: 'nuevas',
-    icon: Building2
-  },
+  // {
+  //   key: 'branches',
+  //   title: 'Sucursales',
+  //   value: 8,
+  //   trend: '+2',
+  //   trendLabel: 'nuevas',
+  //   icon: Building2
+  // },
   {
     key: 'sections',
     title: 'Sectores',
@@ -41,14 +41,14 @@ const statsCards = [
     trendLabel: 'Activas',
     icon: FolderTree
   },
-  {
-    key: 'activity',
-    title: 'Actividad',
-    value: 98,
-    trend: 'Alta',
-    icon: Activity,
-    subIcon: TrendingUp
-  }
+  // {
+  //   key: 'activity',
+  //   title: 'Actividad',
+  //   value: 98,
+  //   trend: 'Alta',
+  //   icon: Activity,
+  //   subIcon: TrendingUp
+  // }
 ]
 
 const quickActions = [
