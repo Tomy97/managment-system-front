@@ -48,7 +48,7 @@ const shareByWhatsApp = () => {
     <div class="flex flex-col items-center gap-6 py-6">
       <div class="flex justify-center">
         <div
-          class="p-[2px] rounded-[2rem] bg-border from-[#6366f1] via-[#a855f7] to-[#ec4899]"
+          class="p-[2px] rounded-[2rem] bg-black"
         >
           <div
             class="bg-white p-4 rounded-[1.9rem] flex items-center justify-center relative"
@@ -58,7 +58,7 @@ const shareByWhatsApp = () => {
             <div
               class="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md"
             >
-              <div class="bg-[#a855f7] p-1 rounded-full">
+              <div class="bg-[#0a0a0a] p-1 rounded-full">
                 <svg
                   class="size-4 text-white"
                   viewBox="0 0 24 24"

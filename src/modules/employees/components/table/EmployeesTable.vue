@@ -74,7 +74,19 @@ const employeeStore = useEmployeeStore()
 </script>
 
 <template>
-  <Table>
+  <div
+    v-if="employeeStore.employees.length === 0"
+    class="flex flex-col items-center justify-center py-12 text-center"
+  >
+    <User class="size-12 text-muted-foreground mb-4" />
+    <p class="text-lg font-medium text-muted-foreground">
+      No hay empleados registrados
+    </p>
+    <p class="text-sm text-muted-foreground mt-2">
+      Agrega un nuevo empleado para comenzar
+    </p>
+  </div>
+  <Table v-else>
     <TableHeader>
       <TableRow>
         <TableHead v-for="header in tableHeaders" :key="header.key">
