@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Component } from 'vue'
-import GenericDialog from './GenericDialog.vue'
+import GenericDialog from '../../../../core/components/dialog/GenericDialog.vue'
 import EmployeeForm from '../form/EmployeeForm.vue'
 import type { ButtonVariants } from '@/components/ui/button'
 import type { EmployeeSchema } from '../../schema/employeeSchema'
@@ -44,7 +44,6 @@ const handleCancel = () => {
       :description="description"
       :buttonVariant="buttonVariant"
       :buttonClass="buttonClass"
-      :prevent-auto-focus="true"
       @update:open="onStateDialogChange"
     >
       <EmployeeForm

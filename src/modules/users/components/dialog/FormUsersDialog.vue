@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import GenericDialog from '@/core/components/dialog/GenericDialog.vue'
-import SectionForm from '../form/SectionForm.vue'
-import { ref, type Component } from 'vue'
 import type { ButtonVariants } from '@/components/ui/button'
-import type { SectionSchema } from '../../schema/sectionSchema'
+import GenericDialog from '@/core/components/dialog/GenericDialog.vue'
+import { ref, type Component } from 'vue'
+import type { UserSchema } from '../../schema/userSchema'
+import UserForm from '../form/UserForm.vue'
 
 const props = defineProps<{
-  title: string
   buttonText: string
-  description?: string
+  icon: Component
+  title: string
+  description: string
   buttonClass?: string
   buttonVariant?: ButtonVariants['variant']
-  icon?: Component
-  initialData?: Partial<SectionSchema>
+  initialData?: Partial<UserSchema>
 }>()
 
 const emit = defineEmits<{
@@ -24,8 +24,12 @@ const onStateDialogChange = (value: boolean) => {
   isOpenDialog.value = value
 }
 
-const handleSubmit = (data: any) => {
+const handleSubmit = (data: UserSchema) => {
   emit('submit', data)
+  isOpenDialog.value = false
+}
+
+const handleCancel = () => {
   isOpenDialog.value = false
 }
 </script>
@@ -34,18 +38,20 @@ const handleSubmit = (data: any) => {
   <GenericDialog
     :open="isOpenDialog"
     :button-text="buttonText"
+    :icon="icon"
     :title="title"
     :description="description"
-    :buttonClass="buttonClass"
     :buttonVariant="buttonVariant"
-    :icon="icon"
-    :preventAutoFocus="false"
+    :buttonClass="buttonClass"
+    :initialData="initialData"
     @update:open="onStateDialogChange"
+    @submit="handleSubmit"
+    @cancel="handleCancel"
   >
-    <SectionForm
+    <UserForm
       :initialData="initialData"
       @submit="handleSubmit"
-      @cancel="onStateDialogChange(false)"
+      @cancel="handleCancel"
     />
   </GenericDialog>
 </template>

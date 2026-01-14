@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import GenericDialog from './GenericDialog.vue'
+import GenericDialog from '../../../../core/components/dialog/GenericDialog.vue'
 import type { EmployeeType } from '../../types/Employee'
 import { Eye } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'

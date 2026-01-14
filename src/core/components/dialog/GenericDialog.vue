@@ -23,7 +23,7 @@ const props = withDefaults(
   {
     buttonClass:
       'bg-destructive text-destructive-foreground hover:bg-red-400 cursor-pointer text-white',
-    preventAutoFocus: false
+    preventAutoFocus: true
   }
 )
 

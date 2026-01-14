@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import GenericDialog from './GenericDialog.vue'
+import GenericDialog from '../../../../core/components/dialog/GenericDialog.vue'
 import { useQRCode } from '@vueuse/integrations/useQRCode'
 import InputGroup from '@/components/ui/input-group/InputGroup.vue'
 import InputGroupInput from '@/components/ui/input-group/InputGroupInput.vue'
@@ -17,16 +17,15 @@ const props = defineProps<{
 }>()
 
 const openDialog = ref<boolean>(false)
-const qrcode = useQRCode(props.token)
+const tokenUrl = computed(() => {
+  return `${import.meta.env.VITE_APP_URL}/managment-system-front${RoutePath.ACTIVATION}/${props.token}`
+})
+const qrcode = useQRCode(tokenUrl)
 const { copy, copied } = useClipboard()
 
 const onStateDialogChange = (value: boolean) => {
   openDialog.value = value
 }
-
-const tokenUrl = computed(() => {
-  return `${import.meta.env.VITE_APP_URL}${RoutePath.ACTIVATION}/${props.token}`
-})
 
 const shareByWhatsApp = () => {
   window.open(
