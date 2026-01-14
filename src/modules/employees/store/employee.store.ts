@@ -6,7 +6,7 @@ export const useEmployeeStore = defineStore(
   'employee',
   () => {
     const employees = ref<EmployeeType[]>([])
-    const totalEmployees = computed(() => employees.value.length )
+    const totalEmployees = computed(() => employees.value.length)
     const monthlyGrowth = computed(() => {
       if (employees.value.length === 0) return 0
       const previousMonthTotal = 20 // Mock: Basandome de como fue el mes pasado
@@ -36,7 +36,6 @@ export const useEmployeeStore = defineStore(
           id: employees.value.length + 1,
           token: crypto.randomUUID()
         }
-        console.log('employeedAddId', employeedAddId)
         employees.value = [...employees.value, employeedAddId]
       }
     }

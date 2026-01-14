@@ -12,7 +12,7 @@ const props = defineProps<{
   description: string
   buttonClass?: string
   buttonVariant?: ButtonVariants['variant']
-  initialData?: EmployeeSchema
+  initialData?: Partial<EmployeeSchema>
 }>()
 
 const emit = defineEmits<{
@@ -25,7 +25,6 @@ const onStateDialogChange = (value: boolean) => {
 }
 
 const handleSubmit = (data: any) => {
-  console.log('Datos del formulario:', data)
   emit('submit', data)
   isOpenDialog.value = false
 }

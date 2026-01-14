@@ -13,8 +13,10 @@ import StatCard from '@/modules/home/components/StatCard.vue'
 import QuickActionCard from '@/modules/home/components/QuickActionCard.vue'
 import { RouteName } from '@/routes/types/route.enum'
 import { useEmployeeStore } from '@/modules/employees/store/employee.store'
+import { useSectionsStore } from '@/modules/sections/store/sections.store'
 
 const employeeStore = useEmployeeStore()
+const sectionsStore = useSectionsStore()
 const statsCards = [
   {
     key: 'employees',
@@ -34,8 +36,8 @@ const statsCards = [
   },
   {
     key: 'sections',
-    title: 'Secciones',
-    value: 15,
+    title: 'Sectores',
+    value: sectionsStore.totalSections,
     trendLabel: 'Activas',
     icon: FolderTree
   },

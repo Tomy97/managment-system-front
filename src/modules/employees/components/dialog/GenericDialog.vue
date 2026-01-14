@@ -40,10 +40,17 @@ const emit = defineEmits<{
         {{ buttonText }}
       </Button>
     </DialogTrigger>
-    <DialogContent class="sm:max-w-[600px]" show-close-button :prevent-auto-focus="preventAutoFocus">
+    <DialogContent
+      class="sm:max-w-[600px]"
+      show-close-button
+      :prevent-auto-focus="preventAutoFocus"
+      @close-auto-focus="(e: Event) => e.preventDefault()"
+    >
       <DialogHeader>
         <DialogTitle>{{ title }}</DialogTitle>
-        <DialogDescription v-if="description">{{ description }}</DialogDescription>
+        <DialogDescription :class="{ 'sr-only': !description }">
+          {{ description || title }}
+        </DialogDescription>
       </DialogHeader>
       <slot />
     </DialogContent>

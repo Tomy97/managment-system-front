@@ -14,6 +14,7 @@ import { useEmployeeStore } from '../../store/employee.store'
 import EmployeeDatesDialog from '../dialog/EmployeeDatesDialog.vue'
 import StatusBadge from '../badge/StatusBadge.vue'
 import ActivationEmployeeDialog from '../dialog/ActivationEmployeeDialog.vue'
+import type { EmployeeSchema } from '../../schema/employeeSchema'
 
 const props = defineProps<{
   employees: EmployeeType[]
@@ -119,7 +120,7 @@ const employeeStore = useEmployeeStore()
             <ActivationEmployeeDialog :token="employee.token" />
           </template>
 
-          <template v-else-if="col.key === 'actions'">
+          <template v-else-if="col.key === 'actions' && employee.id">
             <div class="flex items-center gap-2">
               <EmployeeDatesDialog v-if="employee.id" :employee="employee" />
               <FormEmployeeDialog
@@ -128,7 +129,11 @@ const employeeStore = useEmployeeStore()
                 title="Editar Empleado"
                 description="Completa el formulario para editar el empleado."
                 buttonClass="cursor-pointer border-slate-900"
-                :initialData="employee"
+                :initialData="
+                  employee as unknown as Partial<EmployeeSchema> & {
+                    id?: number
+                  }
+                "
                 @submit="employeeStore.setEmployeesIntoStore"
               />
             </div>
