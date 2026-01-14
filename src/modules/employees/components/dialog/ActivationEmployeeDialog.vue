@@ -18,7 +18,12 @@ const props = defineProps<{
 
 const openDialog = ref<boolean>(false)
 const tokenUrl = computed(() => {
-  return `${import.meta.env.VITE_APP_URL}/managment-system-front${RoutePath.ACTIVATION}/${props.token}`
+  const base = window.location.origin
+  const path = import.meta.env.BASE_URL
+
+  const fullBase = `${base}${path}`.replace(/\/+$/, '')
+
+  return `${fullBase}${RoutePath.ACTIVATION}/${props.token}`
 })
 const qrcode = useQRCode(tokenUrl)
 const { copy, copied } = useClipboard()
