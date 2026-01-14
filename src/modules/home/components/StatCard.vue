@@ -9,7 +9,6 @@ interface IProps {
 }
 
 const props = defineProps<IProps>()
-console.log(props)
 </script>
 
 <template>
@@ -30,11 +29,9 @@ console.log(props)
             :is="props.subIcon"
             class="inline h-3 w-3 text-destructive mr-1"
           />
-          <span
-            v-if="props.trend"
-            class="text-destructive"
-            >{{ props.trend }}</span
-          >
+          <span v-if="props.trend" class="text-destructive">{{
+            props.trend
+          }}</span>
           <span class="text-muted-foreground ml-1">{{ props.trendLabel }}</span>
         </p>
       </div>

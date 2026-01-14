@@ -13,6 +13,8 @@ export const RoutePath = {
   ABSENTEE_REPORT: '/absentee-report',
   USERS: '/users',
   LOGS: '/logs',
+  SETTINGS_ACCESS_SECURITY: '/settings-access-security',
+  TOKEN_MANAGEMENT: '/token-management',
 } as const
 
 export const RouteName = {
@@ -28,4 +30,6 @@ export const RouteName = {
   ABSENTEE_REPORT: 'absentee-report',
   USERS: 'users',
   LOGS: 'logs',
+  SETTINGS_ACCESS_SECURITY: 'settings-access-security',
+  TOKEN_MANAGEMENT: 'token-management',
 } as const

@@ -11,6 +11,7 @@ import {
 } from 'lucide-vue-next'
 import StatCard from '@/modules/home/components/StatCard.vue'
 import QuickActionCard from '@/modules/home/components/QuickActionCard.vue'
+import { RouteName } from '@/routes/types/route.enum'
 
 const statsCards = [
   {
@@ -50,32 +51,38 @@ const quickActions = [
   {
     title: 'Empleados',
     description: 'Gestiona la información de tus empleados',
-    icon: UserCheck
+    icon: UserCheck,
+    name: RouteName.EMPLOYEES
   },
   {
     title: 'Sucursales',
     description: 'Administra las sucursales de tu organización',
-    icon: Building2
+    icon: Building2,
+    name: RouteName.BRANCHES
   },
   {
     title: 'Secciones',
     description: 'Organiza las secciones de trabajo',
-    icon: FolderTree
+    icon: FolderTree,
+    name: RouteName.SECTORS
   },
   {
     title: 'Usuarios',
     description: 'Administra la actividad de tu organización',
-    icon: UserCog
+    icon: UserCog,
+    name: RouteName.USERS
   },
   {
     title: 'Tokens',
     description: 'Administra los tokens de acceso',
-    icon: Key
+    icon: Key,
+    name: RouteName.TOKEN_MANAGEMENT
   },
   {
     title: 'Autenticación',
     description: 'Configuración de acceso y seguridad',
-    icon: Users
+    icon: Users,
+    name: RouteName.SETTINGS_ACCESS_SECURITY
   }
 ]
 </script>
@@ -127,6 +134,7 @@ const quickActions = [
           :title="action.title"
           :description="action.description"
           :icon="action.icon"
+          :routeName="action.name"
         />
       </div>
     </div>

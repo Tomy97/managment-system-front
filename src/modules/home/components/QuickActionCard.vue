@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { Button } from '@/core/components/ui/button'
 import type { FunctionalComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
 interface Props {
   title: string
   description: string
   icon: FunctionalComponent
+  routeName: string
   to?: string
 }
 
 defineProps<Props>()
+const router = useRouter()
+const navigateTo = (route: string) => {
+  router.push({ name: route })
+}
 </script>
 
 <template>
@@ -32,6 +38,7 @@ defineProps<Props>()
         variant="outline"
         size="sm"
         class="w-full group-hover:border-destructive"
+        @click="navigateTo(routeName)"
       >
         Ver más
       </Button>
