@@ -424,7 +424,7 @@ watch(
             <Select
               :model-value="values.reasonForLeave"
               @update:modelValue="
-                setFieldValue('reasonForLeave', $event as string)
+                setFieldValue('reasonForLeave', $event as SelectOption)
               "
             >
               <SelectTrigger class="w-full">

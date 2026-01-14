@@ -67,6 +67,14 @@ export const employeeSchema = z.object({
     .min(1, 'La hora de salida es requerida'),
   active: z.boolean().default(false),
   leaveDate: z.string().optional().or(z.literal('')),
-  reasonForLeave: z.string().optional(),
+  reasonForLeave: z
+    .object(
+      {
+        value: z.number(),
+        label: z.string()
+      },
+      { required_error: 'Debe seleccionar un motivo de baja' }
+    )
+    .optional(),
   mustClock: z.boolean().default(false)
 })
