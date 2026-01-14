@@ -26,8 +26,6 @@ const onStateDialogChange = (value: boolean) => {
 
 const handleSubmit = (data: any) => {
   console.log('Datos del formulario:', data)
-  // Aquí puedes agregar la lógica para guardar el empleado
-  // Por ejemplo, llamar a una API
   emit('submit', data)
   isOpenDialog.value = false
 }

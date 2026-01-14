@@ -28,17 +28,13 @@ const props = defineProps<{
   initialData?: Partial<EmployeeSchema>
 }>()
 
-console.log('initialData', props.initialData)
-
 const emit = defineEmits<{
   (e: 'submit', data: EmployeeSchema): void
   (e: 'cancel'): void
 }>()
 
-// Guardar el id del empleado si existe (para edición)
 const employeeId = ref<number | undefined>(undefined)
 
-// Días de la semana
 const diasSemana: SelectOption[] = [
   { value: 1, label: 'Lunes' },
   { value: 2, label: 'Martes' },
@@ -71,10 +67,8 @@ const { handleSubmit, values, errors, submitCount, setFieldValue } = useForm({
   keepValuesOnUnmount: true
 })
 
-console.log('values', values)
 const onSubmit = handleSubmit(
   (formValues) => {
-    // Incluir el id si existe (para edición)
     const dataToSubmit = {
       ...formValues,
       ...(employeeId.value && { id: employeeId.value })
@@ -87,8 +81,6 @@ const onSubmit = handleSubmit(
 )
 
 const setDayOfWork = (day: number, checked: boolean) => {
-  console.log('day', day)
-  console.log('checked', checked)
   const days = [...(values.daysOfWork ?? [])]
 
   if (checked) {
@@ -104,9 +96,7 @@ const setDayOfWork = (day: number, checked: boolean) => {
 watch(
   () => props.initialData as EmployeeSchema & { id?: number },
   (newData) => {
-    console.log('newData', newData)
     if (newData) {
-      // Guardar el id si existe
       employeeId.value = (newData as any).id
 
       setFieldValue('name', newData.name)
@@ -127,9 +117,7 @@ watch(
       setFieldValue('reasonForLeave', newData.reasonForLeave)
       setFieldValue('email', newData.email)
       setFieldValue('phone', newData.phone)
-      console.log('values desde el watch', values)
     } else {
-      // Limpiar el id si no hay initialData (nuevo empleado)
       employeeId.value = undefined
     }
   },
@@ -140,9 +128,8 @@ watch(
 <template>
   <Form>
     <form class="space-y-6" @submit.prevent="onSubmit">
-      <!-- Primera fila: Nombre y Apellido -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <FormField v-slot="{ field, meta }" name="nombre">
+        <FormField v-slot="{ field, meta }" name="name">
           <FormItem class="relative">
             <FormLabel>Nombre *</FormLabel>
             <FormControl>
@@ -180,7 +167,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Segunda fila: DNI y CUIL -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField v-slot="{ field, meta }" name="dni">
           <FormItem class="relative">
@@ -221,7 +207,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Tercera fila: Correo y Teléfono -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField v-slot="{ field, meta }" name="email">
           <FormItem class="relative">
@@ -262,7 +247,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Legajo -->
       <FormField v-slot="{ field, meta }" name="legajo">
         <FormItem class="relative">
           <FormLabel>Legajo *</FormLabel>
@@ -283,7 +267,6 @@ watch(
         </FormItem>
       </FormField>
 
-      <!-- Sectores -->
       <FormField v-slot="{ meta }" name="sectors">
         <FormItem class="relative">
           <FormLabel>Sectores *</FormLabel>
@@ -316,7 +299,6 @@ watch(
         </FormItem>
       </FormField>
 
-      <!-- Días Laborales -->
       <FormField v-slot="{ meta }" name="diasLaborales">
         <FormItem class="relative">
           <FormLabel>Días Laborales *</FormLabel>
@@ -349,7 +331,6 @@ watch(
         </FormItem>
       </FormField>
 
-      <!-- Horarios -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField v-slot="{ field, meta }" name="horaIngreso">
           <FormItem class="relative">
@@ -390,7 +371,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Checkboxes: Activo y Debe fichar -->
       <div class="space-y-4">
         <FormField name="active">
           <FormItem
@@ -410,7 +390,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Fecha de Baja y Motivo (solo si no está activo) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FormField v-slot="{ field, meta }" name="leaveDate">
           <FormItem class="relative">
@@ -486,7 +465,6 @@ watch(
         </FormField>
       </div>
 
-      <!-- Botones de acción -->
       <div class="flex justify-end gap-3 pt-4">
         <Button
           class="cursor-pointer"

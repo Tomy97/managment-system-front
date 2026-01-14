@@ -3,21 +3,21 @@ import { ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Search, Plus } from 'lucide-vue-next'
-import FormEmployeDialog from '../components/dialog/FormEmployeDialog.vue'
+import FormEmployeeDialog from '../components/dialog/FormEmployeeDialog.vue'
 import EmployeesTable from '../components/table/EmployeesTable.vue'
 import { useEmployeeStore } from '../store/employee.store'
 
 const searchQuery = ref('')
 
 const employeeStore = useEmployeeStore()
+
+console.log('uuid', crypto.randomUUID())
 </script>
 
 <template>
   <div class="w-full p-4 md:p-6 lg:p-8">
     <div class="mx-auto max-w-7xl">
-      <!-- Card Container -->
       <Card>
-        <!-- Header Section -->
         <CardHeader>
           <div
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
@@ -25,7 +25,6 @@ const employeeStore = useEmployeeStore()
             <CardTitle class="text-2xl">Gestión de Empleados</CardTitle>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <!-- Search Input -->
               <div class="relative flex-1 sm:min-w-[250px]">
                 <Search
                   class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -38,8 +37,7 @@ const employeeStore = useEmployeeStore()
                 />
               </div>
 
-              <!-- New Employee Button -->
-              <FormEmployeDialog
+              <FormEmployeeDialog
                 buttonText="Nuevo Empleado"
                 :icon="Plus"
                 title="Nuevo Empleado"

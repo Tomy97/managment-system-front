@@ -14,10 +14,10 @@ const props = withDefaults(
     open: boolean
     buttonText: string
     title: string
-    description: string
+    description?: string
     buttonClass?: string
     buttonVariant?: ButtonVariants['variant']
-    icon: Component
+    icon?: Component
   }>(),
   {
     buttonClass:
@@ -34,14 +34,14 @@ const emit = defineEmits<{
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogTrigger as-child>
       <Button :variant="buttonVariant" :class="buttonClass">
-        <component :is="icon" class="size-4" />
+        <component v-if="icon" :is="icon" class="size-4" />
         {{ buttonText }}
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[600px]" show-close-button>
       <DialogHeader>
         <DialogTitle>{{ title }}</DialogTitle>
-        <DialogDescription>{{ description }}</DialogDescription>
+        <DialogDescription v-if="description">{{ description }}</DialogDescription>
       </DialogHeader>
       <slot />
     </DialogContent>

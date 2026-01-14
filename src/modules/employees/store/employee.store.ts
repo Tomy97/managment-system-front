@@ -16,8 +16,8 @@ export const useEmployeeStore = defineStore(
         daysOfWork: [1, 2, 3, 4, 5],
         entryTime: '08:00',
         exitTime: '17:00',
-        active: true,
-        mustClock: true,
+        active: false,
+        mustClock: false,
         dni: '12345678901',
         cuil: '12345678901',
         employeeNumber: '12345678901',
@@ -26,24 +26,22 @@ export const useEmployeeStore = defineStore(
     ])
 
     const setEmployeesIntoStore = (newEmployees: EmployeeType) => {
-      // Si el empleado tiene un id, significa que es una edición
       if (newEmployees.id) {
         const index = employees.value.findIndex(
           (emp) => emp.id === newEmployees.id
         )
         if (index !== -1) {
-          // Actualizar el empleado existente
           employees.value[index] = { ...newEmployees }
         } else {
-          // Si no se encuentra, agregarlo (caso raro)
           employees.value = [...employees.value, newEmployees]
         }
       } else {
-        // Si no tiene id, es un nuevo empleado
         const employeedAddId = {
           ...newEmployees,
-          id: employees.value.length + 1
+          id: employees.value.length + 1,
+          token: crypto.randomUUID()
         }
+        console.log('employeedAddId', employeedAddId)
         employees.value = [...employees.value, employeedAddId]
       }
     }

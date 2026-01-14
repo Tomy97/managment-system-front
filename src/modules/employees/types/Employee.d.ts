@@ -9,7 +9,7 @@ export type EmployeeType = {
   mustClock: boolean
   email: string
   phone: string
-  sectors: string[]
+  sectors: SelectOption[]
   daysOfWork: number[]
   entryTime: string
   exitTime: string
