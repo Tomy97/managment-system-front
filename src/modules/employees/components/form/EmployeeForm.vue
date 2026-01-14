@@ -254,7 +254,7 @@ watch(
             <Input
               type="number"
               class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              :model-value="values.employeeNumber"
+              :model-value="values.employeeNumber as number | undefined"
               placeholder="Ingrese el número de legajo"
               @blur="field.onBlur"
               @update:modelValue="
