@@ -31,7 +31,11 @@ export const useEmployeeStore = defineStore(
           (emp) => emp.id === newEmployees.id
         )
         if (index !== -1) {
-          employees.value[index] = { ...newEmployees }
+          const existingEmployee = employees.value[index]
+          employees.value[index] = {
+            ...newEmployees,
+            token: newEmployees.token ?? existingEmployee?.token
+          }
         } else {
           employees.value = [...employees.value, newEmployees]
         }

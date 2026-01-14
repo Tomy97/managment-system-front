@@ -3,6 +3,7 @@ export type RoutePathEnum = (typeof RoutePath)[keyof typeof RoutePath]
 export const RoutePath = {
   HOME: '/',
   LOGIN: '/login',
+  ACTIVATION: '/activation',
   REGISTER: '/register',
   EMPLOYEES: '/employees',
   BRANCHES: '/branches',
@@ -17,6 +18,7 @@ export const RoutePath = {
 export const RouteName = {
   HOME: 'home',
   LOGIN: 'login',
+  ACTIVATION: 'activation',
   REGISTER: 'register',
   EMPLOYEES: 'employees',
   BRANCHES: 'branches',

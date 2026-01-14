@@ -1,5 +1,9 @@
-import type { RouteRecordRaw } from 'vue-router'
-import { RoutePath } from '@/routes/types/route.enum'
+import {
+  useRouter,
+  type RouteLocationNormalized,
+  type RouteRecordRaw
+} from 'vue-router'
+import { RouteName, RoutePath } from '@/routes/types/route.enum'
 
 const mainLayout = () => import('@/layout/views/MainLayout.vue')
 const authLayout = () => import('@/layout/views/AuthLayout.vue')
@@ -54,5 +58,18 @@ export const routes: RouteRecordRaw[] = [
     path: RoutePath.LOGIN,
     component: authLayout,
     children: []
+  },
+  {
+    path: `${RoutePath.ACTIVATION}/:token`,
+    name: RouteName.ACTIVATION,
+    component: () => import('@/modules/activation/views/ActivationViews.vue'),
+    beforeEnter: (to: RouteLocationNormalized, _, next) => {
+      const router = useRouter()
+      const token = to.params.token as string
+      if (!token) {
+        return router.go(-1)
+      }
+      next()
+    }
   }
 ]
