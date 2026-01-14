@@ -41,8 +41,7 @@ export const routes: RouteRecordRaw[] = [
       {
         path: RoutePath.CLOCK_IN_REPORTS,
         name: RouteName.CLOCK_IN_REPORTS,
-        component: () =>
-          import('@/modules/reports/views/ClockInReportsViews.vue')
+        component: () => import('@/modules/soon/views/SoonViews.vue')
       },
       {
         path: RoutePath.ABSENTEE_REPORT,

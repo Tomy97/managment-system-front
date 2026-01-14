@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Search, Plus } from 'lucide-vue-next'
+import { Plus, SearchIcon } from 'lucide-vue-next'
 import FormEmployeeDialog from '../components/dialog/FormEmployeeDialog.vue'
 import EmployeesTable from '../components/table/EmployeesTable.vue'
 import { useEmployeeStore } from '../store/employee.store'
+import ButtonGroup from '@/components/ui/button-group/ButtonGroup.vue'
+import Button from '@/components/ui/button/Button.vue'
 
 const searchQuery = ref('')
 
@@ -23,18 +25,12 @@ const employeeStore = useEmployeeStore()
             <CardTitle class="text-2xl">Gestión de Empleados</CardTitle>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div class="relative flex-1 sm:min-w-[250px]">
-                <Search
-                  class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                />
-                <Input
-                  v-model="searchQuery"
-                  type="search"
-                  placeholder="Buscar..."
-                  class="pl-9"
-                />
-              </div>
-
+              <ButtonGroup>
+                <Input placeholder="Buscar empleado..." v-model="searchQuery" type="search" />
+                <Button variant="outline" aria-label="Search">
+                  <SearchIcon />
+                </Button>
+              </ButtonGroup>
               <FormEmployeeDialog
                 buttonText="Nuevo Empleado"
                 :icon="Plus"

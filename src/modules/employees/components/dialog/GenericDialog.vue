@@ -18,10 +18,12 @@ const props = withDefaults(
     buttonClass?: string
     buttonVariant?: ButtonVariants['variant']
     icon?: Component
+    preventAutoFocus?: boolean
   }>(),
   {
     buttonClass:
-      'bg-destructive text-destructive-foreground hover:bg-red-400 cursor-pointer text-white'
+      'bg-destructive text-destructive-foreground hover:bg-red-400 cursor-pointer text-white',
+    preventAutoFocus: false
   }
 )
 
@@ -38,7 +40,7 @@ const emit = defineEmits<{
         {{ buttonText }}
       </Button>
     </DialogTrigger>
-    <DialogContent class="sm:max-w-[600px]" show-close-button>
+    <DialogContent class="sm:max-w-[600px]" show-close-button :prevent-auto-focus="preventAutoFocus">
       <DialogHeader>
         <DialogTitle>{{ title }}</DialogTitle>
         <DialogDescription v-if="description">{{ description }}</DialogDescription>

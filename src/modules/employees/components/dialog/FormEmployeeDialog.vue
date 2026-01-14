@@ -45,6 +45,7 @@ const handleCancel = () => {
       :description="description"
       :buttonVariant="buttonVariant"
       :buttonClass="buttonClass"
+      :prevent-auto-focus="true"
       @update:open="onStateDialogChange"
     >
       <EmployeeForm

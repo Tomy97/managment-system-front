@@ -1,29 +1,46 @@
 <script setup lang="ts">
-import type { DialogContentEmits, DialogContentProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
-import { X } from "lucide-vue-next"
+import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
+import { reactiveOmit } from '@vueuse/core'
+import { X } from 'lucide-vue-next'
 import {
   DialogClose,
   DialogContent,
   DialogPortal,
-  useForwardPropsEmits,
-} from "reka-ui"
-import { cn } from "@/lib/utils"
-import DialogOverlay from "./DialogOverlay.vue"
+  useForwardPropsEmits
+} from 'reka-ui'
+import { cn } from '@/lib/utils'
+import DialogOverlay from './DialogOverlay.vue'
 
 defineOptions({
-  inheritAttrs: false,
+  inheritAttrs: false
 })
 
-const props = withDefaults(defineProps<DialogContentProps & { class?: HTMLAttributes["class"], showCloseButton?: boolean }>(), {
-  showCloseButton: true,
-})
+const props = withDefaults(
+  defineProps<
+    DialogContentProps & {
+      class?: HTMLAttributes['class']
+      showCloseButton?: boolean
+      preventAutoFocus?: boolean
+    }
+  >(),
+  {
+    showCloseButton: true,
+    preventAutoFocus: false
+  }
+)
 const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = reactiveOmit(props, "class")
+const delegatedProps = reactiveOmit(props, 'class', 'preventAutoFocus')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+// Prevenir autofocus si está deshabilitado
+const handleOpenAutoFocus = (event: Event) => {
+  if (props.preventAutoFocus) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <template>
@@ -31,12 +48,22 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     <DialogOverlay />
     <DialogContent
       data-slot="dialog-content"
-      v-bind="{ ...$attrs, ...forwarded }"
+      v-bind="{
+        ...$attrs,
+        ...forwarded,
+        onOpenAutoFocus: props.preventAutoFocus
+          ? handleOpenAutoFocus
+          : undefined
+      }"
       :class="
         cn(
-          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg',
-          props.class,
-        )"
+          'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed z-50 grid w-full max-w-[calc(100%-2rem)] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg',
+          'left-[50%] translate-x-[-50%] overflow-y-auto',
+          'top-4 max-h-[calc(100vh-2rem)]',
+          'sm:top-[50%] sm:-translate-y-1/2 sm:max-h-[90vh]',
+          props.class
+        )
+      "
     >
       <slot />
 

@@ -90,17 +90,7 @@ const navigateTo = (path: string) => {
     :collapsible="'offcanvas'"
   >
     <SidebarHeader class="p-6 !bg-white">
-      <div class="flex items-center gap-3 mb-4">
-        <div
-          class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100"
-        >
-          <div class="flex gap-1">
-            <div class="w-2 h-2 rounded-full bg-teal-400"></div>
-            <div class="w-2 h-2 rounded-full bg-pink-400"></div>
-            <div class="w-2 h-2 rounded-full bg-purple-400"></div>
-          </div>
-        </div>
-      </div>
+      <div class="flex items-center gap-3 mb-4">Logo de la empresa</div>
       <p class="text-lg font-medium text-foreground">Hola, X</p>
     </SidebarHeader>
 

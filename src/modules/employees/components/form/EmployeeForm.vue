@@ -252,11 +252,16 @@ watch(
           <FormLabel>Legajo *</FormLabel>
           <FormControl>
             <Input
+              type="number"
+              class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               :model-value="values.employeeNumber"
               placeholder="Ingrese el número de legajo"
               @blur="field.onBlur"
               @update:modelValue="
-                setFieldValue('employeeNumber', $event as string)
+                setFieldValue(
+                  'employeeNumber',
+                  $event === '' ? undefined : Number($event)
+                )
               "
             />
           </FormControl>

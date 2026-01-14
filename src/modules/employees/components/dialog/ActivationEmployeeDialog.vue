@@ -44,11 +44,12 @@ const shareByWhatsApp = () => {
     title="Activación"
     buttonVariant="outline"
     buttonClass="cursor-pointer border-slate-900"
+    :prevent-auto-focus="true"
   >
     <div class="flex flex-col items-center gap-6 py-6">
       <div class="flex justify-center">
         <div
-          class="p-[2px] rounded-[2rem] bg-black"
+          class="p-[2px] rounded-[2rem] bg-border from-[#6366f1] via-[#a855f7] to-[#ec4899]"
         >
           <div
             class="bg-white p-4 rounded-[1.9rem] flex items-center justify-center relative"
