@@ -17,7 +17,6 @@ const openDialog = ref<boolean>(false)
 const qrcode = useQRCode(props.token)
 const { copy, copied } = useClipboard()
 
-console.log('qrcode', qrcode)
 const onStateDialogChange = (value: boolean) => {
   openDialog.value = value
 }
@@ -28,17 +27,23 @@ const onStateDialogChange = (value: boolean) => {
     :open="openDialog"
     @update:open="onStateDialogChange"
     buttonText="Token"
-    title="Activacion"
+    title="Activación"
     buttonVariant="outline"
     buttonClass="cursor-pointer border-slate-900"
   >
-    <div class="py-4 space-y-4">
-      <div class="flex justify-center items-center w-full h-full">
-        <img :src="qrcode" alt="QR Code" />
+    <div class="flex flex-col items-center gap-6 py-6">
+      <div class="flex justify-center">
+        <img :src="qrcode" alt="QR Code" class="w-40 h-40" />
       </div>
-      <div class="grid w-full max-w-sm gap-6 justify-center">
+
+      <div class="w-full max-w-xs">
         <InputGroup>
-          <InputGroupInput :model-value="props.token" read-only />
+          <InputGroupInput
+            :model-value="props.token"
+            read-only
+            class="text-center"
+          />
+
           <InputGroupAddon align="inline-end">
             <InputGroupButton
               aria-label="Copy"
@@ -46,8 +51,8 @@ const onStateDialogChange = (value: boolean) => {
               size="icon-xs"
               @click="copy(props.token)"
             >
-              <CheckIcon v-if="copied" />
-              <CopyIcon v-if="!copied" />
+              <CheckIcon v-if="copied" class="size-4" />
+              <CopyIcon v-else class="size-4" />
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

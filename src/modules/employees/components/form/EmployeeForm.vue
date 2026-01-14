@@ -412,27 +412,29 @@ watch(
           </FormItem>
         </FormField>
 
-        <FormField v-slot="{ field, meta }" name="reasonForLeave">
+        <FormField v-slot="{ meta }" name="reasonForLeave">
           <FormItem class="relative">
             <FormLabel>Motivo de Baja</FormLabel>
-            <FormControl>
-              <select
-                :model-value="values.reasonForLeave"
-                @blur="field.onBlur"
-                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                @update:modelValue="
-                  setFieldValue('reasonForLeave', $event as string)
-                "
-              >
-                <option
+
+            <Select
+              :model-value="values.reasonForLeave"
+              @update:modelValue="
+                setFieldValue('reasonForLeave', $event as string)
+              "
+            >
+              <SelectTrigger class="w-full">
+                <SelectValue placeholder="Seleccione un motivo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
                   v-for="motivo in motivosBaja"
                   :key="motivo.value"
-                  :value="motivo.value"
+                  :value="motivo"
                 >
                   {{ motivo.label }}
-                </option>
-              </select>
-            </FormControl>
+                </SelectItem>
+              </SelectContent>
+            </Select>
             <FieldError
               v-if="
                 (meta.touched || submitCount > 0) && !!errors.reasonForLeave

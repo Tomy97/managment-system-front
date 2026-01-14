@@ -10,8 +10,6 @@ import { useEmployeeStore } from '../store/employee.store'
 const searchQuery = ref('')
 
 const employeeStore = useEmployeeStore()
-
-console.log('uuid', crypto.randomUUID())
 </script>
 
 <template>
