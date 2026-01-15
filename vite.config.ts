@@ -5,7 +5,6 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/managment-system-front/',
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
