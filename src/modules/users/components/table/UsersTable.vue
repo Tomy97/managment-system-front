@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Edit } from 'lucide-vue-next'
+import { Edit, User } from 'lucide-vue-next'
 import type { UserType } from '../../types/user'
 import { useUsersStore } from '../../store/user.store'
 import Table from '@/components/ui/table/Table.vue'
@@ -46,7 +46,18 @@ const usersStore = useUsersStore()
 </script>
 
 <template>
-  <Table>
+  <div v-if="usersStore.users.length === 0">
+    <div class="flex flex-col items-center justify-center py-12 text-center">
+      <User class="size-12 text-muted-foreground mb-4" />
+      <p class="text-lg font-medium text-muted-foreground">
+        No hay usuarios registrados
+      </p>
+      <p class="text-sm text-muted-foreground mt-2">
+        Agrega un nuevo usuario para comenzar
+      </p>
+    </div>
+  </div>
+  <Table v-else>
     <TableHeader>
       <TableRow>
         <TableHead v-for="header in tableHeaders" :key="header.key">
